@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/antonlindstrom/pgstore v0.0.0-20220421113606-e3a6e3fed12a
-	github.com/cyc-ttn/gorouter v0.0.0-20230206072341-1099f7e38abb
+	github.com/cyc-ttn/gorouter v0.0.0-20230220001623-3271e4a53664
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/sessions v1.2.1
 	github.com/jmoiron/sqlx v1.3.4

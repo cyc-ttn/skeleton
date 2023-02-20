@@ -17,11 +17,6 @@ type GoRouterRoute[R any] struct {
 	gorouter.Route[R]
 }
 
-// GetHandler implements the Route[R] interface
-func (w *GoRouterRoute[R]) GetHandler() HandlerFunc[R] {
-	return HandlerFunc[R](w.Route.GetHandler())
-}
-
 // wrapGoRouter is a special struct that wraps gorouter, so that it properly
 // implements Router.
 type wrapGoRouter[Ctx any] struct {
@@ -57,7 +52,8 @@ func (r *wrapGoRouter[Ctx]) Match(method, path string) (*GoRouterRoute[Ctx], err
 	}, nil
 }
 
-// GoRouter providers a Router which can be
+// GoRouter providers a Router which can be used in skeleton.HttpServer or
+// skeleton.LoggingHttpServer.
 func GoRouter[Ctx any]() Router[Ctx, *GoRouterRoute[Ctx]] {
 	return &wrapGoRouter[Ctx]{
 		RouterNode: gorouter.NewRouter[Ctx](),

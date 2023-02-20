@@ -10,14 +10,11 @@ var (
 	ErrNoRoute = errors.New("could not find route")
 )
 
-// HandlerFunc defines a simple function which takes in a type of context.
-type HandlerFunc[R any] func(R)
-
 // Route defines what should be returned by the router. If the desired route
 // does not comply with the current interface, wrap the route returned from
 // the desired router to comply.
 type Route[R any] interface {
-	GetHandler() HandlerFunc[R]
+	GetHandler() func(R)
 }
 
 // Router defines the methods required by HttpServer for route handler

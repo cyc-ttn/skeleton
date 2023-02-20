@@ -66,8 +66,8 @@ github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGX
 github.com/cncf/udpa/go v0.0.0-20200629203442-efcf912fb354/go.mod h1:WmhPx2Nbnhtbo57+VJT5O0JRkEi1Wbu0z5j0R8u5Hbk=
 github.com/cncf/udpa/go v0.0.0-20201120205902-5459f2c99403/go.mod h1:WmhPx2Nbnhtbo57+VJT5O0JRkEi1Wbu0z5j0R8u5Hbk=
 github.com/cncf/xds/go v0.0.0-20210312221358-fbca930ec8ed/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
-github.com/cyc-ttn/gorouter v0.0.0-20230206072341-1099f7e38abb h1:60+MB5NZvHLFaX3CBMmwK77x8OsBEcxB6Wba/lXik2I=
-github.com/cyc-ttn/gorouter v0.0.0-20230206072341-1099f7e38abb/go.mod h1:QXYqWzdVrdrLjhGeOZQLVx0vqCi3V0eu78R8LRTtsMU=
+github.com/cyc-ttn/gorouter v0.0.0-20230220001623-3271e4a53664 h1:fj03xcUHbWTMy2JP2TCyLMRv4xgp3+VWz3u/n8iOCUo=
+github.com/cyc-ttn/gorouter v0.0.0-20230220001623-3271e4a53664/go.mod h1:QXYqWzdVrdrLjhGeOZQLVx0vqCi3V0eu78R8LRTtsMU=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
