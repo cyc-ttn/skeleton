@@ -123,7 +123,7 @@ func (s *HttpServer[Ctx, R]) ServeWithDelegate(w http.ResponseWriter, r *http.Re
 
 	// Generate the context. It is assumed here that Generator is provided, as
 	// it is required.
-	ctx := delegate.Generate(route, sess)
+	ctx := delegate.Generate(w, r, route, sess)
 	route.GetHandler()(ctx)
 	return nil
 }

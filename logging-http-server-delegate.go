@@ -16,7 +16,7 @@ type LoggingHttpServerDelegate[Ctx any, R Route[Ctx]] interface {
 
 	// Generate generates a context to pass into the routes. The route, related
 	// session and base logger is provided.
-	Generate(R, Session, logger.Logger, logger.HTTPRequest) Ctx
+	Generate(http.ResponseWriter, *http.Request, R, Session, logger.Logger, logger.HTTPRequest) Ctx
 }
 
 // HttpServerDelegateBridge bridges between an HttpServerDelegate and a
@@ -36,6 +36,6 @@ func NewHttpServerDelegateBridge[Ctx any, R Route[Ctx]](l logger.Logger, req log
 	}
 }
 
-func (b *HttpServerDelegateBridge[Ctx, R]) Generate(r R, sess Session) Ctx {
-	return b.Delegate.Generate(r, sess, b.Logger, b.RequestLogger)
+func (b *HttpServerDelegateBridge[Ctx, R]) Generate(wr http.ResponseWriter, req *http.Request, r R, sess Session) Ctx {
+	return b.Delegate.Generate(wr, req, r, sess, b.Logger, b.RequestLogger)
 }
