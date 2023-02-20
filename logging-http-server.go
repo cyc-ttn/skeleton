@@ -35,6 +35,7 @@ type LoggingHttpServer[Ctx any, R Route[Ctx]] struct {
 // return it in the LoggingHttpServerDelegate.Generate function.
 func NewLoggingHttpServer[Ctx any, R Route[Ctx]](
 	l logger.Logger,
+	addr string,
 	S SessionStore,
 	Router Router[Ctx, R],
 	Delegate LoggingHttpServerDelegate[Ctx, R],
@@ -42,8 +43,9 @@ func NewLoggingHttpServer[Ctx any, R Route[Ctx]](
 	server := &LoggingHttpServer[Ctx, R]{
 		Logger: l,
 		HttpServer: &HttpServer[Ctx, R]{
-			S: S,
-			R: Router,
+			Addr: addr,
+			S:    S,
+			R:    Router,
 		},
 		Delegate: Delegate,
 	}
@@ -89,7 +91,7 @@ func (s *LoggingHttpServer[Ctx, R]) ServeHTTP(w http.ResponseWriter, r *http.Req
 
 	// Serve based on the route. We need to pass in a special delegate (since
 	// the HttpServer's delegate is nil.
-	err := s.HttpServer.ServeWithDelegate(w, r, NewHttpServerDelegateBridge[Ctx, R](lgr, reqLogger))
+	err := s.HttpServer.ServeWithDelegate(w, r, NewHttpServerDelegateBridge[Ctx, R](lgr, reqLogger, s.Delegate))
 	if err == nil {
 		return
 	}

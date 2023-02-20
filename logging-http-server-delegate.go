@@ -28,10 +28,11 @@ type HttpServerDelegateBridge[Ctx any, R Route[Ctx]] struct {
 	Delegate      LoggingHttpServerDelegate[Ctx, R]
 }
 
-func NewHttpServerDelegateBridge[Ctx any, R Route[Ctx]](l logger.Logger, req logger.HTTPRequest) *HttpServerDelegateBridge[Ctx, R] {
+func NewHttpServerDelegateBridge[Ctx any, R Route[Ctx]](l logger.Logger, req logger.HTTPRequest, del LoggingHttpServerDelegate[Ctx, R]) *HttpServerDelegateBridge[Ctx, R] {
 	return &HttpServerDelegateBridge[Ctx, R]{
 		Logger:        l,
 		RequestLogger: req,
+		Delegate:      del,
 	}
 }
 
