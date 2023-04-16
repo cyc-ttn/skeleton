@@ -2,8 +2,11 @@ package skeleton
 
 import (
 	"errors"
+	"net/http"
 
+	"cloud.google.com/go/logging"
 	"github.com/cyc-ttn/gorouter"
+	"github.com/monstercat/golib/logger"
 )
 
 var (
@@ -58,4 +61,74 @@ func GoRouter[Ctx any]() Router[Ctx, *GoRouterRoute[Ctx]] {
 	return &wrapGoRouter[Ctx]{
 		RouterNode: gorouter.NewRouter[Ctx](),
 	}
+}
+
+// GoRoute creates a skeleton.Route whose underlying implementation is a
+// gorouter.DefaultRoute.
+func GoRoute[Ctx any](method string, path string, fn func(ctx Ctx)) Route[Ctx] {
+	return &gorouter.DefaultRoute[Ctx]{
+		Method:      method,
+		Path:        path,
+		HandlerFunc: fn,
+	}
+}
+
+// GoHttpServerDelegate is a server delegate that returns a
+// gorouter.RouteContext. Note that the base gorouter.RouteContext is meant
+// to be encapsulated in another struct which is used to provide Session
+// functionality. As a result, this delegate also does not use the session
+// variable.
+//
+// Please encapsulate this delegate to provide session related functionality
+// to the internal variables.
+type GoHttpServerDelegate struct{}
+
+// Generate should generate a context to pass into the routes. The route
+// and related session is provided. This is used only in the Serve and
+// ServeHTTP functions.
+func (d *GoHttpServerDelegate) Generate(
+	w http.ResponseWriter,
+	req *http.Request,
+	r *GoRouterRoute[*gorouter.RouteContext],
+	s Session,
+) *gorouter.RouteContext {
+	return &gorouter.RouteContext{
+		W:      w,
+		R:      req,
+		Method: r.Method,
+		Path:   r.Path,
+		Params: r.Params,
+		Query:  r.Query,
+	}
+}
+
+type LoggingGoHttpServerDelegate struct {
+	GoHttpServerDelegate
+}
+
+// RequestLogger generates a logger specific to the HTTP request.
+func (d *LoggingGoHttpServerDelegate) RequestLogger(l logger.Logger, r *http.Request) logger.HTTPRequest {
+	// Request for Google Logger
+	req := &logging.HTTPRequest{
+		Request: r,
+	}
+
+	return &logger.GoogleHTTPRequest{
+		Logger:     l,
+		LogRequest: req,
+	}
+}
+
+// Generate generates a context to pass into the routes. The route, related
+// session and base logger is provided. Note that this also ignores the loggers
+// as the standard gorouter.RouteContext does not allow for routers.
+func (d *LoggingGoHttpServerDelegate) Generate(
+	w http.ResponseWriter,
+	req *http.Request,
+	r *GoRouterRoute[*gorouter.RouteContext],
+	s Session,
+	l logger.Logger,
+	lr logger.HTTPRequest,
+) *gorouter.RouteContext {
+	return d.GoHttpServerDelegate.Generate(w, req, r, s)
 }

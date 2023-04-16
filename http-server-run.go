@@ -67,6 +67,11 @@ type RunDelegate interface {
 //
 // ```
 func Run(runner Runner, runDelegate RunDelegate) {
+	// Set a default for runDelegate
+	if runDelegate == nil {
+		runDelegate = &NilRunDelegate{}
+	}
+
 	// This is for registering server shut down and shutting down the goroutines
 	// that need to be shut down when the server abruptly closes. The result ot
 	// the context's `Done()` function can be passed into any goroutine as a

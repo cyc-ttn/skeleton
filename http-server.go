@@ -84,7 +84,9 @@ func NewHttpServer[Ctx any, R Route[Ctx]](
 
 // Run the server. This is a blocking function.
 func (s *HttpServer[Ctx, R]) Run(onShutdown ...func()) error {
-	defer s.S.Shutdown()
+	if s.S != nil {
+		defer s.S.Shutdown()
+	}
 
 	// This is so that we can handle cleanup
 	s.Server = &http.Server{
@@ -110,9 +112,15 @@ func (s *HttpServer[Ctx, R]) Shutdown(ctx context.Context) error {
 func (s *HttpServer[Ctx, R]) ServeWithDelegate(w http.ResponseWriter, r *http.Request, delegate HttpServerDelegate[Ctx, R]) error {
 	// Initialize the session. If there is an error, return the default error
 	// message.
-	sess, err := s.S.Get(r)
-	if err != nil {
-		return NewSessionError("unable to get session", err)
+	var sess Session
+	if s.S != nil {
+		var err error
+
+		// Attempt to retrieve the session. Could be nil.
+		sess, err = s.S.Get(r)
+		if err != nil {
+			return NewSessionError("unable to get session", err)
+		}
 	}
 
 	// Retrieve a route, if possible.
